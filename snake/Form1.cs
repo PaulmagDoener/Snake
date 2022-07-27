@@ -15,7 +15,7 @@ namespace snake
         bool unten, oben, links, rechts;
 
         public Form1()
-        {
+        {                                                                                   //1:02
             InitializeComponent();
         }
 
@@ -39,16 +39,20 @@ namespace snake
             timer1.Enabled = true;
 
             if (radioButton1.Checked)
-                timer1.Interval = 1500;
-
-            else if (radioButton2.Checked)
                 timer1.Interval = 1000;
 
+            else if (radioButton2.Checked)
+                timer1.Interval = 600;
+
             else if (radioButton3.Checked)
-                timer1.Interval = 500;
+                timer1.Interval = 300;
 
             groupBox1.Enabled = false;
             button1.Enabled = false;
+
+            unten = true;
+
+            feld.Controls.Add(apple,zufall.Next(0,feld.ColumnCount), zufall.Next(0, feld.RowCount));
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -61,15 +65,65 @@ namespace snake
 
         }
 
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.W:
+                    if (!unten)
+                    {
+                        unten = links = rechts = false;
+                        oben = true;
+                    }
+
+                    break;
+
+                case Keys.A:
+                    if (!rechts)
+                    {
+                        unten = oben = rechts = false;
+                        links = true;
+                    }
+                    break;
+
+
+                case Keys.S:
+                    if (!oben)
+                    {
+                        oben = links = rechts = false; unten = links = oben = false;
+                        unten = true;
+                    }
+                    break;
+
+                case Keys.D:
+                    if (!links)
+                    {
+                        unten = links = oben = false;
+                        rechts = true;
+                    }
+                    break;
+
+
+
+
+            }
+        }
+
         private void head_Paint(object sender, PaintEventArgs e)
         {
 
         }
 
+        Panel apple = new Panel(); 
+
+        Random zufall  = new Random();
+
         private void Form1_Load(object sender, EventArgs e)
         {
 
         }
+
+
 
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -90,6 +144,8 @@ namespace snake
             if (links)
             {
                 feld.SetCellPosition(head, new TableLayoutPanelCellPosition(feld.GetColumn(head) - 1, feld.GetRow(head)));
+
+
             }
         }
     }
