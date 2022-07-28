@@ -15,7 +15,7 @@ namespace snake
         bool unten, oben, links, rechts;
 
         public Form1()
-        {                                                                                   //1:02
+        {                                                                                 
             InitializeComponent();
         }
 
@@ -52,7 +52,12 @@ namespace snake
 
             unten = true;
 
+            apple.BackColor = SystemColors.Highlight;
+            apple.Size = new Size(13, 13);
             feld.Controls.Add(apple,zufall.Next(0,feld.ColumnCount), zufall.Next(0, feld.RowCount));
+
+            Schlange.Add(head);
+            zellen.Add(feld.GetCellPosition(head));
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -118,6 +123,9 @@ namespace snake
 
         Random zufall  = new Random();
 
+        List<Panel> Schlange = new List<Panel>();
+        List<TableLayoutPanelCellPosition> zellen = new List<TableLayoutPanelCellPosition>();
+
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -131,22 +139,32 @@ namespace snake
                 feld.SetCellPosition(head, new TableLayoutPanelCellPosition(feld.GetColumn(head), feld.GetRow(head) + 1));
 
             if (oben)
-            {
                 feld.SetCellPosition(head, new TableLayoutPanelCellPosition(feld.GetColumn(head), feld.GetRow(head) - 1));
-            }
+           
 
 
             if (rechts)
-            {
                 feld.SetCellPosition(head, new TableLayoutPanelCellPosition(feld.GetColumn(head) + 1, feld.GetRow(head)));
-            }
+            
 
             if (links)
-            {
                 feld.SetCellPosition(head, new TableLayoutPanelCellPosition(feld.GetColumn(head) - 1, feld.GetRow(head)));
 
+            if (feld.GetCellPosition(head).Equals(feld.GetCellPosition(apple)))
+            {
+                feld.SetCellPosition(apple, new TableLayoutPanelCellPosition(zufall.Next(0, feld.ColumnCount), zufall.Next(0, feld.RowCount)));
+
+                Panel schweif = new Panel();
+                schweif.BackColor = SystemColors.ControlText;
+                schweif.Size = new Size(13, 13);
+                feld.Controls.Add(schweif, zellen[zellen.Count - 1].Column, zellen[zellen.Count - 1].Row);
+
+                Schlange.Add(schweif);
+                zellen.Add(new TableLayoutPanelCellPosition(zellen[zellen.Count - 1].Column, zellen[zellen.Count - 1].Row));
 
             }
+
+            
         }
     }
 }
